@@ -16,6 +16,7 @@ jobs:
         env:
           BOARD_URL: ${{ vars.BOARD_URL }}
           SHIPIT_TOKEN: ${{ secrets.SHIPIT_TOKEN }}      
+
   deploy:
     needs: test
     runs-on: ubuntu-latest
