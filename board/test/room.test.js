@@ -16,14 +16,19 @@ test('sanitizeEvent trims + caps callsign, rejects empty', () => {
   assert.equal(sanitizeEvent({ ...base, callsign: 123 }), null);
 });
 
+test('sanitizeEvent lowercases the callsign (case-insensitive usernames; lowercase Pages hostnames)', () => {
+  assert.equal(sanitizeEvent({ ...base, callsign: 'JohnDoe' }).callsign, 'johndoe');
+});
+
 test('sanitizeEvent rejects unknown stage/status', () => {
   assert.equal(sanitizeEvent({ ...base, stage: 'orbit' }), null);
   assert.equal(sanitizeEvent({ ...base, status: 'exploded' }), null);
 });
 
-test('sanitizeEvent defaults a bad colour, keeps a good one', () => {
-  assert.equal(sanitizeEvent({ ...base, color: 'blue' }).color, DEFAULT_COLOR);
+test('sanitizeEvent defaults a bad colour, keeps a good one, resolves a named one', () => {
+  assert.equal(sanitizeEvent({ ...base, color: 'blurple' }).color, DEFAULT_COLOR);
   assert.equal(sanitizeEvent({ ...base, color: '#ABCDEF' }).color, '#ABCDEF');
+  assert.equal(sanitizeEvent({ ...base, color: 'blue' }).color, '#3b82f6'); // name → hex
 });
 
 test('sanitizeEvent keeps http(s) siteUrl, drops anything else', () => {
